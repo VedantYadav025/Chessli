@@ -53,6 +53,8 @@ BitBoard::BitBoard(Piece& piece, Color& color)
             break;
         }
     }
+    else 
+        throw std::invalid_argument("Color or Piece is invalid");
 }
 
 void BitBoard::printBitBoard() const {

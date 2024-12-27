@@ -3,6 +3,7 @@
 enum Color {
 	White,
 	Black,
+	ColorLess,  // for printing 
 };
 
 enum Piece {
@@ -14,19 +15,19 @@ enum Piece {
 	King,
 };
 
-void valueOfPiece(const Piece& piece) {
+std::int32_t  valueOfPiece(const Piece& piece) {
 	if (piece == 0)
-		std::cout << "Pawn" << std::endl;
+		return 1;
 	else if (piece == 1)
-		std::cout << "Knight" << std::endl;
+		return 3;
 	else if (piece == 2)
-		std::cout << "Bishop" << std::endl;
+		return 3;
 	else if (piece == 3)
-		std::cout << "Rook" << std::endl;
+		return 5;
 	else if (piece == 4)
-		std::cout << "Queen" << std::endl;
+		return 9;
 	else if (piece == 5)
-		std::cout << "King" << std::endl;
+		return INT32_MAX;
 	else
 		throw std::invalid_argument("Invalid piece");
 }
