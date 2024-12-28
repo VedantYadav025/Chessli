@@ -1,13 +1,19 @@
 #include "Pieces.h"
 #include <array>
 #include <cstdint>
-#include <unordered_map>
 
 using BitBoard = std::uint64_t;
 
 class Board {
 public:
 	Board();
+	BitBoard allWhitePieces() const;
+	BitBoard allBlackPieces() const;
+	BitBoard allPieces() const;
+	void printBitBoard(const Piece &p, const Color &c) const;
+	void printAllWhitePieces() const;
+	void printAllBlackPieces() const;
+	void printAllPieces() const;
 
 private:
 	bool white_can_castle_kingside;
