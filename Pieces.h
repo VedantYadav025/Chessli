@@ -1,6 +1,6 @@
 #include <iostream>
 
-const enum class Color: std::uint16_t {
+enum class Color: std::uint16_t {
 	White = 0,
 	Black,
 };
@@ -13,6 +13,14 @@ const enum class Piece : std::uint16_t{
 	Queen,
 	King,
 };
+
+struct PieceInfo {
+	Color color_;
+	Piece piece_;
+	BitBoard bitboard_;
+};
+
+// valueOfPiece(white_pawns_.piece_)
 
 inline std::int32_t  valueOfPiece(const Piece& piece) {
 	if (piece == Piece::Pawn)
