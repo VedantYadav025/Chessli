@@ -1,13 +1,12 @@
 #include <iostream>
 
-enum class Color {
-	White,
+const enum class Color: std::uint16_t {
+	White = 0,
 	Black,
-	ColorLess,  // for printing 
 };
 
-enum class Piece {
-	Pawn,
+const enum class Piece : std::uint16_t{
+	Pawn = 0,
 	Knight,
 	Bishop,
 	Rook,
