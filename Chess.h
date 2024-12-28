@@ -4,6 +4,8 @@
 #pragma once
 
 #include <iostream>
+#include <string>
+#include <bitset>
 #include "Board.h"
 
 // TODO: Reference additional headers your program requires here.

@@ -1,11 +1,13 @@
 #include <iostream>
+#include <cstdint>
+using BitBoard = std::uint64_t;
 
 enum class Color: std::uint16_t {
 	White = 0,
 	Black,
 };
 
-const enum class Piece : std::uint16_t{
+enum class Piece : std::uint16_t{
 	Pawn = 0,
 	Knight,
 	Bishop,
@@ -36,3 +38,52 @@ inline std::int32_t  valueOfPiece(const Piece& piece) {
 	else
 		throw std::invalid_argument("Invalid piece");
 }
+
+inline bool getBitOfBitBoard(const BitBoard& bitboard, const std::int8_t index) {
+	if (index < 0 || index > 63)
+		throw std::invalid_argument("Index is out of range\n");
+	return (bitboard >> index) & 1;
+}
+
+
+inline BitBoard maskRank(const std::uint8_t &index) {
+	if (index < 0 || index > 7)
+		throw std::invalid_argument("Index out of range\n");
+	BitBoard mask = 0x00000000000000FF;
+	mask = mask << (8 * index);
+	return mask;
+}
+
+inline BitBoard clearRank(const std::uint8_t& index) {
+	if (index < 0 || index > 7)
+		throw std::invalid_argument("Index is out of range\n");
+	return ~(maskRank(index));
+}
+
+inline BitBoard maskFile(const std::uint8_t& index) {
+	if (index < 0 || index > 7)
+		throw std::invalid_argument("Index is out of range\n");
+	BitBoard mask = 0x8080808080808080;
+	mask = mask << index;
+	return mask;
+}
+
+inline BitBoard clearFile(const std::uint8_t& index) {
+	if (index < 0 || index > 7)
+		throw std::invalid_argument("Index is out of range\n");
+	return ~(maskFile(index));
+}
+
+
+inline void printU64(const BitBoard& bitboard) {
+	// Loop through the bits in chunks of 8
+	for (int i = 56; i >= 0; i -= 8) {
+		// Print each chunk of 8 bits
+		for (int j = 0; j <= 7; ++j) {
+			std::cout << ((bitboard >> (i + j)) & 1);
+		}
+		std::cout << std::endl;
+	}
+}
+
+
