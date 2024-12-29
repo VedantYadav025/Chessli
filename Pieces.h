@@ -69,7 +69,7 @@ inline BitBoard clearFile(const std::uint8_t& index) {
 	return ~maskFile(index);
 }
 
-inline void printU64(const BitBoard& bitboard) {
+void printU64(const BitBoard& bitboard) {
 	// Loop through the bits in chunks of 8
 	for (int i = 56; i >= 0; i -= 8) {
 		// Print each chunk of 8 bits
