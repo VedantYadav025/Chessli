@@ -3,12 +3,12 @@
 #include <cassert>
 using BitBoard = std::uint64_t;
 
-const enum class Color: std::uint16_t {
+enum class Color: std::uint16_t {
 	White = 0,
 	Black,
 };
 
-const enum class Piece : std::uint16_t{
+enum class Piece : std::uint16_t{
 	Pawn = 0,
 	Knight,
 	Bishop,
