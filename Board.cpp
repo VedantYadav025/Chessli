@@ -145,9 +145,38 @@ PieceInfo& Board::getPieceInfo(const Piece& p, const Color& c) {
 // H: 3, 4 and 5 are out of bounds 
 // in spot_1, spot_2 and spot_8, AND with clearFile(A) as no these spots do not exist of King placed in A-file
 // Similary, for H, clearFile(H) for spot 3, 4 and 5
+BitBoard Board::whiteKnightValid(const Square& sq) const {
+    BitBoard knight_bitboard = bitboardOfSquare(sq);
+    BitBoard spot_1 = (knight_bitboard & clearFile(0) & clearFile(1)) >> 6;
+    BitBoard spot_2 = (knight_bitboard & clearFile(0)) << 15;
+    BitBoard spot_3 = (knight_bitboard & clearFile(7)) << 17;
+    BitBoard spot_4 = (knight_bitboard & clearFile(6) & clearFile(7)) << 10;
 
-BitBoard Board::whiteKingValid() const {
-    BitBoard king_bitboard = this->white_king_.bitboard_;
+    BitBoard spot_5 = (knight_bitboard & clearFile(6) & clearFile(7)) >> 6;
+    BitBoard spot_6 = (knight_bitboard & clearFile(7)) >> 15;
+    BitBoard spot_7 = (knight_bitboard & clearFile(0)) >> 17;
+    BitBoard spot_8 = (knight_bitboard & clearFile(0) & clearFile(1)) >> 10;
+    return (spot_1 | spot_2 | spot_3 | spot_4 | spot_5 | spot_6 | spot_7 | spot_8) & ~this->allWhitePieces();
+
+}
+
+BitBoard Board::blackKnightValid(const Square& sq) const {
+    BitBoard knight_bitboard = bitboardOfSquare(sq);
+    BitBoard spot_1 = (knight_bitboard & clearFile(0) & clearFile(1)) >> 6;
+    BitBoard spot_2 = (knight_bitboard & clearFile(0)) << 15;
+    BitBoard spot_3 = (knight_bitboard & clearFile(7)) << 17;
+    BitBoard spot_4 = (knight_bitboard & clearFile(6) & clearFile(7)) << 10;
+
+    BitBoard spot_5 = (knight_bitboard & clearFile(6) & clearFile(7)) >> 6;
+    BitBoard spot_6 = (knight_bitboard & clearFile(7)) >> 15;
+    BitBoard spot_7 = (knight_bitboard & clearFile(0)) >> 17;
+    BitBoard spot_8 = (knight_bitboard & clearFile(0) & clearFile(1)) >> 10;
+
+    return (spot_1 | spot_2 | spot_3 | spot_4 | spot_5 | spot_6 | spot_7 | spot_8) & ~this->allBlackPieces();
+}
+
+BitBoard Board::whiteKingValid(const Square &sq) const {
+    BitBoard king_bitboard = bitboardOfSquare(sq);
     BitBoard spot_1 = (king_bitboard & clearFile(0)) << 7; // Upper-left
     BitBoard spot_2 = king_bitboard << 8;  // Upper
     BitBoard spot_3 = (king_bitboard & clearFile(7)) << 9; // Upper-right
@@ -160,8 +189,8 @@ BitBoard Board::whiteKingValid() const {
     return (spot_1 | spot_2 | spot_3 | spot_4 | spot_5 | spot_6 | spot_7 | spot_8) & (~this->allWhitePieces());
 }
 
-BitBoard Board::blackKingValid() const {
-    BitBoard king_bitboard = this->black_king_.bitboard_;
+BitBoard Board::blackKingValid(const Square& sq) const {
+    BitBoard king_bitboard = bitboardOfSquare(sq);
     BitBoard spot_1 = (king_bitboard & clearFile(0)) << 7; // Upper-left
     BitBoard spot_2 = king_bitboard << 8;  // Upper
     BitBoard spot_3 = (king_bitboard & clearFile(7)) << 9; // Upper-right
@@ -174,9 +203,9 @@ BitBoard Board::blackKingValid() const {
     return (spot_1 | spot_2 | spot_3 | spot_4 | spot_5 | spot_6 | spot_7 | spot_8) & (~this->allBlackPieces());
 }
 
-BitBoard Board::whiteKnightValid() const {
-    BitBoard knight_bitboard = this->white_knights_.bitboard_;
-    BitBoard spot_1 = (knight_bitboard & clearFile(0) & clearFile(1)) >> 6; 
+BitBoard Board::whiteKnightValid(const Square& sq) const {
+    BitBoard knight_bitboard = bitboardOfSquare(sq);
+    BitBoard spot_1 = (knight_bitboard & clearFile(0) & clearFile(1)) >> 6;
     BitBoard spot_2 = (knight_bitboard & clearFile(0)) << 15;
     BitBoard spot_3 = (knight_bitboard & clearFile(7)) << 17;
     BitBoard spot_4 = (knight_bitboard & clearFile(6) & clearFile(7)) << 10;
@@ -189,8 +218,9 @@ BitBoard Board::whiteKnightValid() const {
     return (spot_1 | spot_2 | spot_3 | spot_4 | spot_5 | spot_6 | spot_7 | spot_8) & ~this->allWhitePieces();
 }
 
-BitBoard Board::blackKnightValid() const {
-    BitBoard knight_bitboard = this->black_knights_.bitboard_;
+
+BitBoard Board::blackKnightValid(const Square& sq) const {
+    BitBoard knight_bitboard = bitboardOfSquare(sq);
     BitBoard spot_1 = (knight_bitboard & clearFile(0) & clearFile(1)) >> 6;
     BitBoard spot_2 = (knight_bitboard & clearFile(0)) << 15;
     BitBoard spot_3 = (knight_bitboard & clearFile(7)) << 17;
@@ -202,4 +232,9 @@ BitBoard Board::blackKnightValid() const {
     BitBoard spot_8 = (knight_bitboard & clearFile(0) & clearFile(1)) >> 10;
 
     return (spot_1 | spot_2 | spot_3 | spot_4 | spot_5 | spot_6 | spot_7 | spot_8) & ~this->allBlackPieces();
+}
+
+
+BitBoard Board::whitePawnValid(const Square& sq) const {
+    return 0ULL;
 }
