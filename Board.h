@@ -19,6 +19,9 @@ enum class Square : std::uint8_t {
 	a8, b8, c8, d8, e8, f8, g8, h8
 };
 
+inline std::int16_t rank(const Square& sq) {
+	return (static_cast<std::int16_t>(sq) / 8 + 1);
+}
 
 inline std::string toLower(const std::string& str) {
 	std::string lowerStr = str;
@@ -73,12 +76,12 @@ public:
 	BitBoard allWhitePieces() const;
 	BitBoard allBlackPieces() const;
 	BitBoard allPieces() const;
-	BitBoard whiteKingValid() const;
-	BitBoard blackKingValid() const;
-	BitBoard whiteKnightValid() const;
-	BitBoard blackKnightValid() const;
-	BitBoard whitePawnValid() const;
-	BitBoard blackPawnValid() const;
+	BitBoard whiteKingValid(const Square& sq) const;
+	BitBoard blackKingValid(const Square& sq) const;
+	BitBoard whiteKnightValid(const Square& sq) const;
+	BitBoard blackKnightValid(const Square& sq) const;
+	BitBoard whitePawnValid(const Square& sq) const;
+	BitBoard blackPawnValid(const Square& sqj) const;
 	void printBitBoard(const Piece &p, const Color &c) const;
 	void printAllWhitePieces() const;
 	void printAllBlackPieces() const;

@@ -44,6 +44,8 @@ void Board::clearBoard() {
 // I am right now not too worried about whether that Square is already occupied by any Piece.
 // I am just making this function to test my validMoves() functions. 
 // Will definetly complete this when needed 
+// Maybe not allow users to put piece on already occupied squares
+// Will make a vacantSquare() function
 void Board::setPieceOnSquare(const Piece& p, const Color& c, const Square& sq) {
     this->getPieceInfo(p, c).bitboard_ = bitboardOfSquare(sq);
 }
@@ -145,35 +147,7 @@ PieceInfo& Board::getPieceInfo(const Piece& p, const Color& c) {
 // H: 3, 4 and 5 are out of bounds 
 // in spot_1, spot_2 and spot_8, AND with clearFile(A) as no these spots do not exist of King placed in A-file
 // Similary, for H, clearFile(H) for spot 3, 4 and 5
-BitBoard Board::whiteKnightValid(const Square& sq) const {
-    BitBoard knight_bitboard = bitboardOfSquare(sq);
-    BitBoard spot_1 = (knight_bitboard & clearFile(0) & clearFile(1)) >> 6;
-    BitBoard spot_2 = (knight_bitboard & clearFile(0)) << 15;
-    BitBoard spot_3 = (knight_bitboard & clearFile(7)) << 17;
-    BitBoard spot_4 = (knight_bitboard & clearFile(6) & clearFile(7)) << 10;
 
-    BitBoard spot_5 = (knight_bitboard & clearFile(6) & clearFile(7)) >> 6;
-    BitBoard spot_6 = (knight_bitboard & clearFile(7)) >> 15;
-    BitBoard spot_7 = (knight_bitboard & clearFile(0)) >> 17;
-    BitBoard spot_8 = (knight_bitboard & clearFile(0) & clearFile(1)) >> 10;
-    return (spot_1 | spot_2 | spot_3 | spot_4 | spot_5 | spot_6 | spot_7 | spot_8) & ~this->allWhitePieces();
-
-}
-
-BitBoard Board::blackKnightValid(const Square& sq) const {
-    BitBoard knight_bitboard = bitboardOfSquare(sq);
-    BitBoard spot_1 = (knight_bitboard & clearFile(0) & clearFile(1)) >> 6;
-    BitBoard spot_2 = (knight_bitboard & clearFile(0)) << 15;
-    BitBoard spot_3 = (knight_bitboard & clearFile(7)) << 17;
-    BitBoard spot_4 = (knight_bitboard & clearFile(6) & clearFile(7)) << 10;
-
-    BitBoard spot_5 = (knight_bitboard & clearFile(6) & clearFile(7)) >> 6;
-    BitBoard spot_6 = (knight_bitboard & clearFile(7)) >> 15;
-    BitBoard spot_7 = (knight_bitboard & clearFile(0)) >> 17;
-    BitBoard spot_8 = (knight_bitboard & clearFile(0) & clearFile(1)) >> 10;
-
-    return (spot_1 | spot_2 | spot_3 | spot_4 | spot_5 | spot_6 | spot_7 | spot_8) & ~this->allBlackPieces();
-}
 
 BitBoard Board::whiteKingValid(const Square &sq) const {
     BitBoard king_bitboard = bitboardOfSquare(sq);
@@ -235,6 +209,56 @@ BitBoard Board::blackKnightValid(const Square& sq) const {
 }
 
 
+// So, Pawns are intersting. They will exclusively be in one direction (for each color)
+// and will have 2 moves, if rank == 2, shift by 1 and 2, otherwise, shift by 1 , these are 
+// as long as there is NO PIECE of any color in the square (in case of rank == 2, we have to see 
+// whether some piece is in way of the Pawn.)
+
 BitBoard Board::whitePawnValid(const Square& sq) const {
-    return 0ULL;
+    BitBoard pawn_bitboard = bitboardOfSquare(sq);
+    std::int16_t rank_of_pawn = rank(sq);
+    BitBoard state_1, state_2, state_3, state_4;
+    if (rank_of_pawn == 2) {
+        state_1 = (pawn_bitboard << 8) & (~this->allPieces());
+        state_2 = ((pawn_bitboard & clearFile(0)) << 7) & this->allBlackPieces();
+        state_3 = ((pawn_bitboard & clearFile(7)) << 9) & this->allBlackPieces();
+        if (state_1 == 0)
+            state_4 = 0;
+        else
+            state_4 = (pawn_bitboard << 16) & ~this->allPieces();
+    }
+    else if (rank_of_pawn != 7) {
+        state_1 = (pawn_bitboard << 8) & (~this->allPieces());
+        state_2 = ((pawn_bitboard & clearFile(0)) << 7) & this->allBlackPieces();
+        state_3 = ((pawn_bitboard & clearFile(7)) << 9) & this->allBlackPieces();
+    }
+    else {
+        ;
+    }
+    return state_1 | state_2 | state_3 | state_4;
+}
+
+
+BitBoard Board::blackPawnValid(const Square& sq) const {
+    BitBoard pawn_bitboard = bitboardOfSquare(sq);
+    std::int16_t rank_of_pawn = rank(sq);
+    BitBoard state_1, state_2, state_3, state_4;
+    if (rank_of_pawn == 7) {
+        state_1 = (pawn_bitboard >> 8) & (~this->allPieces());
+        state_2 = ((pawn_bitboard & clearFile(7)) >> 7) & this->allWhitePieces();
+        state_3 = ((pawn_bitboard & clearFile(0)) >> 9) & this->allWhitePieces();
+        if (state_1 == 0)
+            state_4 = 0;
+        else
+            state_4 = (pawn_bitboard >> 16) & ~this->allPieces();
+    }
+    else if (rank_of_pawn != 0) {
+        state_1 = (pawn_bitboard >> 8) & (~this->allPieces());
+        state_2 = ((pawn_bitboard & clearFile(7)) >> 7) & this->allWhitePieces();
+        state_3 = ((pawn_bitboard & clearFile(0)) >> 9) & this->allWhitePieces();
+    }
+    else {
+        ;
+    }
+    return state_1 | state_2 | state_3 | state_4;
 }
