@@ -173,3 +173,33 @@ BitBoard Board::blackKingValid() const {
     BitBoard spot_8 = (king_bitboard & clearFile(0)) >> 1; // Left
     return (spot_1 | spot_2 | spot_3 | spot_4 | spot_5 | spot_6 | spot_7 | spot_8) & (~this->allBlackPieces());
 }
+
+BitBoard Board::whiteKnightValid() const {
+    BitBoard knight_bitboard = this->white_knights_.bitboard_;
+    BitBoard spot_1 = (knight_bitboard & clearFile(0) & clearFile(1)) >> 6; 
+    BitBoard spot_2 = (knight_bitboard & clearFile(0)) << 15;
+    BitBoard spot_3 = (knight_bitboard & clearFile(7)) << 17;
+    BitBoard spot_4 = (knight_bitboard & clearFile(6) & clearFile(7)) << 10;
+
+    BitBoard spot_5 = (knight_bitboard & clearFile(6) & clearFile(7)) >> 6;
+    BitBoard spot_6 = (knight_bitboard & clearFile(7)) >> 15;
+    BitBoard spot_7 = (knight_bitboard & clearFile(0)) >> 17;
+    BitBoard spot_8 = (knight_bitboard & clearFile(0) & clearFile(1)) >> 10;
+
+    return (spot_1 | spot_2 | spot_3 | spot_4 | spot_5 | spot_6 | spot_7 | spot_8) & ~this->allWhitePieces();
+}
+
+BitBoard Board::blackKnightValid() const {
+    BitBoard knight_bitboard = this->black_knights_.bitboard_;
+    BitBoard spot_1 = (knight_bitboard & clearFile(0) & clearFile(1)) >> 6;
+    BitBoard spot_2 = (knight_bitboard & clearFile(0)) << 15;
+    BitBoard spot_3 = (knight_bitboard & clearFile(7)) << 17;
+    BitBoard spot_4 = (knight_bitboard & clearFile(6) & clearFile(7)) << 10;
+
+    BitBoard spot_5 = (knight_bitboard & clearFile(6) & clearFile(7)) >> 6;
+    BitBoard spot_6 = (knight_bitboard & clearFile(7)) >> 15;
+    BitBoard spot_7 = (knight_bitboard & clearFile(0)) >> 17;
+    BitBoard spot_8 = (knight_bitboard & clearFile(0) & clearFile(1)) >> 10;
+
+    return (spot_1 | spot_2 | spot_3 | spot_4 | spot_5 | spot_6 | spot_7 | spot_8) & ~this->allBlackPieces();
+}

@@ -6,11 +6,10 @@
 int main() {
 	Board chess_board;
 	chess_board.clearBoard();
-	chess_board.setPieceOnSquare(Piece::King, Color::White, Square::a1);
-	std::cout << "Original Board: \n";
+	chess_board.setPieceOnSquare(Piece::Knight, Color::Black, Square::a4);
+	std::cout << "Set Piece on board\n";
 	chess_board.printAllPieces();
-	std::cout << "\n\n";
-	std::cout << "BitBoard of Squares where King on a1 can attack: \n";
-	printU64(chess_board.whiteKingValid());
+	std::cout << "Attack BitBoard of White Knight\n";
+	printU64(chess_board.whiteKnightValid());
 	return 0;
 }
