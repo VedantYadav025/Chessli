@@ -1,13 +1,14 @@
 #include <iostream>
 #include <cstdint>
+#include <cassert>
 using BitBoard = std::uint64_t;
 
-enum class Color: std::uint16_t {
+const enum class Color: std::uint16_t {
 	White = 0,
 	Black,
 };
 
-enum class Piece : std::uint16_t{
+const enum class Piece : std::uint16_t{
 	Pawn = 0,
 	Knight,
 	Bishop,
@@ -54,16 +55,10 @@ inline BitBoard maskRank(const std::uint8_t &index) {
 	return mask;
 }
 
-inline BitBoard clearRank(const std::uint8_t& index) {
-	if (index < 0 || index > 7)
-		throw std::invalid_argument("Index is out of range\n");
-	return ~(maskRank(index));
-}
-
 inline BitBoard maskFile(const std::uint8_t& index) {
 	if (index < 0 || index > 7)
 		throw std::invalid_argument("Index is out of range\n");
-	BitBoard mask = 0x8080808080808080;
+	BitBoard mask = 0x0101010101010101;
 	mask = mask << index;
 	return mask;
 }
@@ -71,9 +66,8 @@ inline BitBoard maskFile(const std::uint8_t& index) {
 inline BitBoard clearFile(const std::uint8_t& index) {
 	if (index < 0 || index > 7)
 		throw std::invalid_argument("Index is out of range\n");
-	return ~(maskFile(index));
+	return ~maskFile(index);
 }
-
 
 inline void printU64(const BitBoard& bitboard) {
 	// Loop through the bits in chunks of 8
