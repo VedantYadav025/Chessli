@@ -68,25 +68,22 @@ inline BitBoard bitboardOfSquare(const Square& square_name) {
 class Board {
 public:
 	Board();
+	void clearBoard();
+	void setPieceOnSquare(const Piece& p, const Color& c, const Square& sq);
 	BitBoard allWhitePieces() const;
 	BitBoard allBlackPieces() const;
 	BitBoard allPieces() const;
-	PieceInfo getWhitePawns() const;
-	PieceInfo getBlackPawns() const;
-	PieceInfo getWhiteKnights() const;
-	PieceInfo getBlackKnights() const;
-	PieceInfo getWhiteBishops() const;
-	PieceInfo getBlackBishops() const;
-	PieceInfo getWhiteRooks() const;
-	PieceInfo getBlackRooks() const;
-	PieceInfo getWhiteQueens() const;
-	PieceInfo getBlackQueens() const;
-	PieceInfo getWhiteKing() const;
-	PieceInfo getBlackKing() const;
+	BitBoard whiteKingValid() const;
+	BitBoard blackKingValid() const;
+	BitBoard whiteKnightValid() const;
+	BitBoard blackKnightValid() const;
+	BitBoard whitePawnValid() const;
+	BitBoard blackPawnValid() const;
 	void printBitBoard(const Piece &p, const Color &c) const;
 	void printAllWhitePieces() const;
 	void printAllBlackPieces() const;
 	void printAllPieces() const;
+	PieceInfo& getPieceInfo(const Piece& p, const Color& c);
 
 private:
 	bool white_can_castle_kingside;
