@@ -2,15 +2,14 @@
 //
 #include "Chess.h"
 #include "Board.h"
+#include <iostream>
 
 int main() {
 	Board chess_board;
 	chess_board.clearBoard();
-	chess_board.setPieceOnSquare(Piece::Pawn, Color::White, Square::a2);
-	chess_board.setPieceOnSquare(Piece::Knight, Color::Black, Square::b3);
-	std::cout << "Original Board: \n";
+	chess_board.setPieceOnSquare(Piece::Rook, Color::White, Square::a2);
 	chess_board.printAllPieces();
-	std::cout << "BitBoard of places pawn can move, when placed on a2\n";
-	printU64(chess_board.whitePawnValid(Square::a2));
+	std::cout << "\n\n\n";
+	printU64(chess_board.whiteRookValid(Square::a2));
 	return 0;
 }
