@@ -69,6 +69,7 @@ BitBoard Board::allPieces() const {
   return (this->allWhitePieces() | this->allBlackPieces());
 }
 
+
 // Printing BitBoard in Chess-board format
 void Board::printBitBoard(const Piece &p, const Color &c) const {
   if (p == Piece::Pawn && c == Color::White)
