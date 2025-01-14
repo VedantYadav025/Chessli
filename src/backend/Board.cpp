@@ -347,9 +347,11 @@ BitBoard Board::whiteRookValid(const Square &sq) const {
 BitBoard Board::whiteBishopValid(const Square &sq) const {
   std::int16_t rank_bishop = rank(sq);
   std::int16_t file_bishop = file(sq);
+  return 0;
 }
 
 BitBoard Board::blackBishopValid(const Square &sq) const {
   std::int16_t rank_bishop = rank(sq);
   std::int16_t file_bishop = file(sq);
+  return 0;
 }
