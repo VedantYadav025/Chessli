@@ -1,6 +1,13 @@
+#pragma once
+
 #include "Board.h"
-#include "utils.h"
+#include <array>
+#include <cstddef>
 #include <cstdint>
+#include <iostream>
+#include <ostream>
+#include <stdexcept>
+#include <utility>
 
 Board::Board()
     : white_can_castle_kingside(true), white_can_castle_queenside(true),
@@ -10,15 +17,70 @@ Board::Board()
   this->white_rooks_ = {Color::White, Piece::Rook, 0x0000000000000081ULL};
   this->white_knights_ = {Color::White, Piece::Knight, 0x0000000000000042ULL};
   this->white_bishops_ = {Color::White, Piece::Bishop, 0x0000000000000024ULL};
-  this->white_queens_ = {Color::White, Piece::Queen, 0x0000000000000008ULL};
-  this->white_king_ = {Color::White, Piece::King, 0x0000000000000010ULL};
+  this->white_king_ = {Color::White, Piece::Queen, 0x0000000000000008ULL};
+  this->white_queens_ = {Color::White, Piece::King, 0x0000000000000010ULL};
 
   this->black_pawns_ = {Color::Black, Piece::Pawn, 0x00FF000000000000ULL};
   this->black_rooks_ = {Color::Black, Piece::Rook, 0x8100000000000000ULL};
   this->black_knights_ = {Color::Black, Piece::Knight, 0x4200000000000000ULL};
   this->black_bishops_ = {Color::Black, Piece::Bishop, 0x2400000000000000ULL};
-  this->black_queens_ = {Color::Black, Piece::Queen, 0x0800000000000000ULL};
-  this->black_king_ = {Color::Black, Piece::King, 0x1000000000000000ULL};
+  this->black_king_ = {Color::Black, Piece::Queen, 0x0800000000000000ULL};
+  this->black_queens_ = {Color::Black, Piece::King, 0x1000000000000000ULL};
+
+
+  std::vector<std::uint16_t> indexes;
+  std::pair<std::uint16_t, std::uint16_t> pair_idx;
+
+  for (int i = 0; i < 8; i++) {
+    for (int j = 0; j < 8; j++) {
+      this->board_array_[i][j] = std::make_pair(Piece::None, Color::None);
+    }
+  }
+
+  auto populateBoardArray = [&](const PieceInfo &piece_info, Piece piece,
+                                Color color) {
+    indexes = indexOfSquaresOccupied(piece_info);
+    for (const std::uint16_t &idx : indexes) {
+      pair_idx = indexOfSquare(static_cast<Square>(idx));
+      this->board_array_[pair_idx.first][pair_idx.second] =
+          std::make_pair(piece, color);
+    }
+  };
+
+  populateBoardArray(this->white_pawns_, Piece::Pawn, Color::White);
+  populateBoardArray(this->white_rooks_, Piece::Rook, Color::White);
+  populateBoardArray(this->white_knights_, Piece::Knight, Color::White);
+  populateBoardArray(this->white_bishops_, Piece::Bishop, Color::White);
+  populateBoardArray(this->white_queens_, Piece::Queen, Color::White);
+  populateBoardArray(this->white_king_, Piece::King, Color::White);
+
+  populateBoardArray(this->black_pawns_, Piece::Pawn, Color::Black);
+  populateBoardArray(this->black_rooks_, Piece::Rook, Color::Black);
+  populateBoardArray(this->black_knights_, Piece::Knight, Color::Black);
+  populateBoardArray(this->black_bishops_, Piece::Bishop, Color::Black);
+  populateBoardArray(this->black_queens_, Piece::Queen, Color::Black);
+  populateBoardArray(this->black_king_, Piece::King, Color::Black);
+}
+
+void Board::printBoard(const Color& point_of_view) const {
+  switch (point_of_view) {
+    case Color::Black:
+      for (int i = 0; i < 8; i++) {
+        for (int j = 0; j < 8; j++) {
+          std::cout << fenLetter(this->board_array_[i][j]) << ' ';
+        }
+        std::cout << '\n';
+      }
+    case Color::White:
+      for (int i = 7; i >= 0; i--) {
+        for (int j = 7; j >= 0; j--) {
+          std::cout << fenLetter(this->board_array_[i][j]) << ' ';
+        }
+        std::cout << '\n';
+      }
+    case Color::None:
+      std::cout << "Invalid Color\n";
+  }
 }
 
 // Clearing the board (mainly for testing purposes)
@@ -272,23 +334,22 @@ BitBoard Board::blackPawnValid(const Square &sq) const {
 BitBoard Board::whiteRookValid(const Square &sq) const {
   std::int16_t rank_rook = rank(sq);
   std::int16_t file_rook = file(sq);
-  BitBoard rook_attack_ray =
+  BitBoard rook_attack_rays =
       (maskRank(rank_rook) | maskFile(file_rook)) & ~bitboardOfSquare(sq);
   // std::cout << blockers << std::endl;
-  BitBoard blockers = clearBit(rook_attack_ray, 8 * rank_rook) &
-                      clearBit(rook_attack_ray, 8 * (rank_rook + 1) - 1) &
-                      clearBit(rook_attack_ray, file_rook) &
-                      clearBit(rook_attack_ray, 56 + file_rook);
+  BitBoard blockers = clearBit(rook_attack_rays, 8 * rank_rook) &
+                      clearBit(rook_attack_rays, 8 * (rank_rook + 1) - 1) &
+                      clearBit(rook_attack_rays, file_rook) &
+                      clearBit(rook_attack_rays, 56 + file_rook);
   return blockers;
-  return 0;
 }
 
-BitBoard Board::whiteBishopValid(const Square &sq) {
-	std::int16_t rank_bishop = rank(sq);
-	std::int16_t file_bishop = file(sq);	
+BitBoard Board::whiteBishopValid(const Square &sq) const {
+  std::int16_t rank_bishop = rank(sq);
+  std::int16_t file_bishop = file(sq);
 }
 
-BitBoard Board::blackBishopValid(const Square &sq) {
-	std::int16_t rank_bishop = rank(sq);
-	std::int16_t file_bishop = file(sq);	
+BitBoard Board::blackBishopValid(const Square &sq) const {
+  std::int16_t rank_bishop = rank(sq);
+  std::int16_t file_bishop = file(sq);
 }

@@ -1,11 +1,13 @@
 #include <iostream>
 #include <cstdint>
 #include <cassert>
+#include <vector>
 using BitBoard = std::uint64_t;
 
 enum class Color: std::uint16_t {
 	White = 0,
 	Black,
+	None,
 };
 
 enum class Piece : std::uint16_t{
@@ -15,6 +17,7 @@ enum class Piece : std::uint16_t{
 	Rook,
 	Queen,
 	King,
+	None,
 };
 
 struct PieceInfo {
@@ -80,4 +83,11 @@ inline void printU64(const BitBoard& bitboard) {
 	}
 }
 
-
+inline std::vector<std::uint16_t> indexOfSquaresOccupied(const PieceInfo& p) {
+	std::vector<std::uint16_t> indexes;
+	for (std::size_t i = 0; i < 64; i++) {
+		if (p.bitboard_ & (1ULL << i))
+			indexes.push_back(i);
+	}
+	return indexes;
+}

@@ -1,12 +1,24 @@
 #pragma once
 
-#include "utils.h"
+#include "Pieces.h"
+
 #include <array>
 #include <cstdint>
+#include <ostream>
+#include <stdexcept>
 #include <string>
 #include <cctype>
 #include <algorithm>
 #include <unordered_map>
+#include <utility>
+
+
+using Piece_Color = std::pair<Piece, Color>;
+
+// inline std::ostream& operator<<(std::ostream& output, Piece_Color& p) {
+// 		switch (P) {
+// 	}
+// }
 
 enum class Square : std::uint8_t {
 	a1 = 0, b1, c1, d1, e1, f1, g1, h1,
@@ -18,6 +30,18 @@ enum class Square : std::uint8_t {
 	a7, b7, c7, d7, e7, f7, g7, h7,
 	a8, b8, c8, d8, e8, f8, g8, h8
 };
+
+inline std::pair<std::uint16_t, std::uint16_t> indexOfSquare(const Square& sq) {
+	std::pair<std::uint16_t, std::uint16_t> index;
+	index.first = static_cast<std::uint16_t>(sq) / 8;
+	index.second = static_cast<std::uint16_t>(sq) % 8;
+	return index;
+} 
+
+inline std::uint64_t clearBit(const BitBoard& bitboard, const std::uint8_t &bit_pos) {
+    std::uint64_t mask = ~(1ULL << bit_pos);
+    return bitboard & mask;
+}
 
 inline std::int16_t rank(const Square& sq) {
 	return (static_cast<std::int16_t>(sq) / 8);
@@ -71,12 +95,33 @@ inline BitBoard bitboardOfSquare(const Square& square_name) {
 	return (1ULL << static_cast<std::uint8_t>(square_name));
 }
 
+inline char fenLetter(const Piece_Color &piece_color) {
+	switch (piece_color.first) {
+		case Piece::Pawn:
+			return piece_color.second == Color::White ? 'P' : 'p';
+		case Piece::Knight:
+			return piece_color.second == Color::White ? 'N' : 'n';
+		case Piece::Bishop:
+			return piece_color.second == Color::White ? 'B' : 'b';
+		case Piece::Rook:
+			return piece_color.second == Color::White ? 'R' : 'r';
+		case Piece::Queen:
+			return piece_color.second == Color::White ? 'Q' : 'q';
+		case Piece::King:
+			return piece_color.second == Color::White ? 'K' : 'k';
+		case Piece::None:
+			return '.';
+		default:
+			throw std::invalid_argument("Invalid piece type");
+	}
+}
 
 class Board {
 public:
 	Board();
 	void clearBoard();
 	void setPieceOnSquare(const Piece& p, const Color& c, const Square& sq);
+	std::array<std::array<std::pair<Piece, Color>, 8>, 8> boardArray() const;
 	BitBoard allWhitePieces() const;
 	BitBoard allBlackPieces() const;
 	BitBoard allPieces() const;
@@ -92,11 +137,13 @@ public:
 	BitBoard blackRookValid(const Square& sq) const;
 	BitBoard whiteQueenValid(const Square& sq) const;
 	BitBoard blackQueenValid(const Square& sq) const;
+	void printBoard(const Color& point_of_view) const;
 	void printBitBoard(const Piece &p, const Color &c) const;
 	void printAllWhitePieces() const;
 	void printAllBlackPieces() const;
 	void printAllPieces() const;
 	PieceInfo& getPieceInfo(const Piece& p, const Color& c);
+	// void test() const;
 
 private:
 	bool white_can_castle_kingside;
@@ -115,4 +162,16 @@ private:
 	PieceInfo black_bishops_;
 	PieceInfo black_queens_;
 	PieceInfo black_king_;
+	std::array<std::array<Piece_Color, 8>, 8> board_array_;
 };
+
+
+// inline void Board::test() const {
+// 	for (int i = 7; i >= 0; i--) {
+// 		for (int j = 7; j >= 0; j--) {
+// 			std::cout << fenLetter(this->board_array_[i][j]) << ' ';
+// 		}
+// 		std::cout << '\n';
+// 	}
+// 	return;
+// }
