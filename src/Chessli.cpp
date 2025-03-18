@@ -3,24 +3,12 @@
 
 #include "Chessli.h"
 
-
 int main()
 {
-	/*
-	Chess::Game chess_game;
-	//std::string_view fen_string = "4k2r/6r1/8/8/8/8/3R4/R3K3 w Qk";
+	std::string_view fen_string = "2kr1bnr/1ppbpppp/p1n5/8/3P4/2N2N2/PPP1BPPP/R1BR2K1 b";
+	Chess::Game chess_game(fen_string);
 	chess_game.printBoard();
-	chess_game.makeMove({ Chess::Square::e2, Chess::Square::e4 });
-	chess_game.makeMove({ Chess::Square::d7, Chess::Square::d5 });
-	std::cout << "*******************\n";
-	chess_game.printBoard();
-	std::cout << "*******************\n";
-	Chess::printBitBoard(chess_game.getEngine().blackPawnValid(Chess::Square::d5));
-	*/
-	for (std::size_t i = 0; i < 64; i++)
-	{
-		std::cout << "Square: " << static_cast<Chess::Square>(i) << std::endl;
-		Chess::printBitBoard(Chess::rook_mask[i]);
-	}
+	std::cout << "*****************************\n\n";
+	Chess::printBitBoard(chess_game.getEngine().whiteBishopValid(Chess::Square::e2));
 	return 0;
 }

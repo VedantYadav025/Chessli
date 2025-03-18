@@ -120,6 +120,28 @@ namespace Chess
 		return rook;
 	}
 
+	constexpr inline BitBoard generateBishopMask(const int& square)
+	{
+		// attack bitboard
+		BitBoard attacks = 0ULL;
+
+		// init files & ranks
+		int f, r;
+
+		// init target files & ranks
+		int tr = square / 8;
+		int tf = square % 8;
+
+		// generate attacks
+		for (r = tr + 1, f = tf + 1; r <= 6 && f <= 6; r++, f++) attacks |= (1ULL << (r * 8 + f));
+		for (r = tr + 1, f = tf - 1; r <= 6 && f >= 1; r++, f--) attacks |= (1ULL << (r * 8 + f));
+		for (r = tr - 1, f = tf + 1; r >= 1 && f <= 6; r--, f++) attacks |= (1ULL << (r * 8 + f));
+		for (r = tr - 1, f = tf - 1; r >= 1 && f >= 1; r--, f--) attacks |= (1ULL << (r * 8 + f));
+
+		// return attack map for bishop on a given square
+		return attacks;
+	}
+
 	constexpr inline std::array<BitBoard, 64> initRookMasks()
 	{
 		std::array<BitBoard, 64> rook_mask;
@@ -128,6 +150,15 @@ namespace Chess
 		return rook_mask;
 	}
 
+	constexpr inline std::array<BitBoard, 64> initBishopMasks()
+	{
+		std::array<BitBoard, 64> bishop_mask;
+		for (std::size_t i = 0; i < 64; i++)
+			bishop_mask[i] = generateBishopMask(i);
+		return bishop_mask;
+	}
+
 	constexpr std::array<BitBoard, 64> rook_mask = initRookMasks();
+	constexpr std::array<BitBoard, 64> bishop_mask = initBishopMasks();
 }
 

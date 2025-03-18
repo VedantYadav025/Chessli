@@ -241,9 +241,50 @@ namespace Chess
 		return attacks;
 	}
 
-	std::array<std::array<BitBoard, 4096>, 64> initRookAttack()
+	BitBoard bishop_attacks_on_the_fly(int square, BitBoard block)
 	{
-		static std::array<std::array<BitBoard, 4096>, 64> rook_attacks{};
+		BitBoard attacks = 0ULL;
+
+		// init files & ranks
+		int f, r;
+
+		// init target files & ranks
+		int tr = square / 8;
+		int tf = square % 8;
+
+		// generate attacks
+		for (r = tr + 1, f = tf + 1; r <= 7 && f <= 7; r++, f++)
+		{
+			attacks |= (1ULL << (r * 8 + f));
+			if (block & (1ULL << (r * 8 + f))) break;
+		}
+
+		for (r = tr + 1, f = tf - 1; r <= 7 && f >= 0; r++, f--)
+		{
+			attacks |= (1ULL << (r * 8 + f));
+			if (block & (1ULL << (r * 8 + f))) break;
+		}
+
+		for (r = tr - 1, f = tf + 1; r >= 0 && f <= 7; r--, f++)
+		{
+			attacks |= (1ULL << (r * 8 + f));
+			if (block & (1ULL << (r * 8 + f))) break;
+		}
+
+		for (r = tr - 1, f = tf - 1; r >= 0 && f >= 0; r--, f--)
+		{
+			attacks |= (1ULL << (r * 8 + f));
+			if (block & (1ULL << (r * 8 + f))) break;
+		}
+
+		// return attack map for bishop on a given square
+		return attacks;
+	}
+
+	std::vector<std::vector<BitBoard>> initRookAttack()
+	{
+		//static std::array<std::array<BitBoard, 4096>, 64> rook_attacks{};
+		std::vector<std::vector<BitBoard>> rook_attacks(64, std::vector<BitBoard>(4096));
 		for (int square = 0; square < 64; square++)
 		{
 			BitBoard mask = rook_mask[square];
@@ -260,6 +301,27 @@ namespace Chess
 			}
 		}
 		return rook_attacks;
+	}
+
+	std::vector<std::vector<BitBoard>> initBishopAttack()
+	{
+		std::vector<std::vector<BitBoard>> bishop_attacks(64, std::vector<BitBoard>(512));
+		for (int square = 0; square < 64; square++)
+		{
+			BitBoard mask = bishop_mask[square];
+			int bit_count = count_bits(mask);
+
+			int occupancy_variations = 1 << bit_count;
+
+			for (int count = 0; count < occupancy_variations; count++)
+			{
+				BitBoard occupancy = set_occupancy(count, bit_count, mask);
+				BitBoard magic_index = occupancy * bishop_magics[square] >> (64 - bishop_relevant_bits[square]);
+				bishop_attacks[square][magic_index] = bishop_attacks_on_the_fly(square, occupancy);
+			}
+
+		}
+		return bishop_attacks;
 	}
 
 }

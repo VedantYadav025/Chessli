@@ -2,7 +2,10 @@
 
 namespace Chess
 {
-	Engine::Engine(Board& board) : board_(board) {}
+	Engine::Engine(Board& board) : board_(board) {
+		rook_attacks_ = initRookAttack();
+		bishop_attacks_ = initBishopAttack();
+	}
 
 	BitBoard Engine::whiteKingValid(const Square& sq) const
 	{
@@ -219,7 +222,54 @@ namespace Chess
 		occupancy *= rook_magics[static_cast<int>(sq)];
 		occupancy >>= 64 - rook_relevant_bits[static_cast<int>(sq)];
 		
-		const std::array<std::array<BitBoard, 4096>, 64> rook_attacks = initRookAttack();
-		return rook_attacks[static_cast<int>(sq)][occupancy];
+		//static const std::vector<std::vector<BitBoard, 4096>, 64> rook_attacks = initRookAttack();
+		//static const std::vector<std::vector<BitBoard>> rook_attacks = initRookAttack();
+		return this->rook_attacks_[static_cast<int>(sq)][occupancy] & (~this->board_.allWhitePieces());
 	}
+
+	BitBoard Engine::blackRookValid(const Square& sq) const
+	{
+		BitBoard occupancy = this->board_.allPieces();
+		unsetBit(occupancy, sq);
+		occupancy &= rook_mask[static_cast<int>(sq)];
+		occupancy *= rook_magics[static_cast<int>(sq)];
+		occupancy >>= 64 - rook_relevant_bits[static_cast<int>(sq)];
+
+		//static const std::vector<std::vector<BitBoard, 4096>, 64> rook_attacks = initRookAttack();
+		//static const std::vector<std::vector<BitBoard>> rook_attacks = initRookAttack();
+		return this->rook_attacks_[static_cast<int>(sq)][occupancy] & (~this->board_.allBlackPieces());
+
+	}
+	BitBoard Engine::whiteBishopValid(const Square& sq) const
+	{
+		BitBoard occupancy = this->board_.allPieces();
+		unsetBit(occupancy, sq);
+		occupancy &= bishop_mask[static_cast<int>(sq)];
+		occupancy *= bishop_magics[static_cast<int>(sq)];
+		occupancy >>= 64 - bishop_relevant_bits[static_cast<int>(sq)];
+
+		return this->bishop_attacks_[static_cast<int>(sq)][occupancy] & (~this->board_.allWhitePieces());
+	}
+
+	BitBoard Engine::blackBishopValid(const Square& sq) const
+	{
+		BitBoard occupancy = this->board_.allPieces();
+		unsetBit(occupancy, sq);
+		occupancy &= bishop_mask[static_cast<int>(sq)];
+		occupancy *= bishop_magics[static_cast<int>(sq)];
+		occupancy >>= 64 - bishop_relevant_bits[static_cast<int>(sq)];
+
+		return this->bishop_attacks_[static_cast<int>(sq)][occupancy] & (~this->board_.allBlackPieces());
+	}
+
+	BitBoard Engine::whiteQueenValid(const Square& sq) const
+	{
+		return ((this->whiteRookValid(sq)) | (this->whiteBishopValid(sq)));
+	}
+
+	BitBoard Engine::blackQueenValid(const Square& sq) const
+	{
+		return ((this->blackRookValid(sq)) | (this->blackQueenValid(sq)));
+	}
+
 }

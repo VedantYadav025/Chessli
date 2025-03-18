@@ -20,6 +20,9 @@ namespace Chess {
 
 	// rook attacks
 	BitBoard rook_attacks_on_the_fly(int square, BitBoard block);
+	BitBoard bishop_attacks_on_the_fly(int square, BitBoard block);
 
-	std::array<std::array<BitBoard, 4096>, 64> initRookAttack();
+	//std::array<std::array<BitBoard, 4096>, 64> initRookAttack();
+	std::vector<std::vector<BitBoard>> initRookAttack();
+	std::vector<std::vector<BitBoard>> initBishopAttack();
 }
