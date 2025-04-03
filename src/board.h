@@ -18,6 +18,8 @@ namespace Chess
 		BitBoard allBlackPieces() const;
 		BitBoard allPieces() const;
 		std::string getFEN() const;
+		std::pair<Piece, Color> getPiece(const Square& square) const;
+		std::unordered_map<Square, char> getBoardMap() const;
 
 	private:
 		std::array<BitBoard, 12> bitboards_;

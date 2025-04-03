@@ -32,8 +32,6 @@ namespace Chess
 		return ~maskRank(rank);
 	}
 
-
-
 	constexpr inline auto setBit = [](BitBoard& bitboard, const Square& sq) -> void
 		{
 			bitboard |= 1ULL << static_cast<int>(sq);
@@ -142,7 +140,7 @@ namespace Chess
 		return attacks;
 	}
 
-	constexpr inline std::array<BitBoard, 64> initRookMasks()
+	inline std::array<BitBoard, 64> initRookMasks()
 	{
 		std::array<BitBoard, 64> rook_mask;
 		for (std::size_t i = 0; i < 64; i++)
@@ -150,7 +148,7 @@ namespace Chess
 		return rook_mask;
 	}
 
-	constexpr inline std::array<BitBoard, 64> initBishopMasks()
+	inline std::array<BitBoard, 64> initBishopMasks()
 	{
 		std::array<BitBoard, 64> bishop_mask;
 		for (std::size_t i = 0; i < 64; i++)
@@ -158,7 +156,7 @@ namespace Chess
 		return bishop_mask;
 	}
 
-	constexpr std::array<BitBoard, 64> rook_mask = initRookMasks();
-	constexpr std::array<BitBoard, 64> bishop_mask = initBishopMasks();
+	const std::array<BitBoard, 64> rook_mask = initRookMasks();
+	const std::array<BitBoard, 64> bishop_mask = initBishopMasks();
 }
 

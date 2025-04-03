@@ -20,6 +20,11 @@ namespace Chess {
 		Square from_square, to_square;
 	};
 
+	inline std::ostream& operator<<(std::ostream& output, const Move& move) {
+		output << move.from_square << move.to_square << '\n';
+		return output;
+	}
+
 	std::unordered_map<Square, char> parseFEN(const std::string_view& fen_string);
 
 	std::vector<Square> squaresOfPiece(const std::unordered_map<Square, char>& board_map, const std::uint64_t& piece_idx);

@@ -1,4 +1,5 @@
 #include "board.h"
+#include <utility>
 
 namespace Chess
 {
@@ -176,6 +177,45 @@ namespace Chess
 			fen.push_back('b');
 
 		return fen;
+	}
+
+	std::pair<Piece, Color> Board::getPiece(const Square& square) const
+	{
+		char piece_letter = this->board_map_.at(square);
+		switch (piece_letter)
+		{
+		case ('K'):
+			return std::make_pair(Piece::King, Color::White);
+		case ('k'):
+			return std::make_pair(Piece::King, Color::Black);
+		case('Q'):
+			return std::make_pair(Piece::Queen, Color::White);
+		case ('q'):
+			return std::make_pair(Piece::Queen, Color::Black);
+		case ('R'):
+			return std::make_pair(Piece::Rook, Color::White);
+		case ('r'):
+			return std::make_pair(Piece::Rook, Color::Black);
+		case ('B'):
+			return std::make_pair(Piece::Bishop, Color::White);
+		case ('b'):
+			return std::make_pair(Piece::Bishop, Color::Black);
+		case ('N'):
+			return std::make_pair(Piece::Knight, Color::White);
+		case ('n'):
+			return std::make_pair(Piece::Knight, Color::Black);
+		case ('P'):
+			return std::make_pair(Piece::Pawn, Color::White);
+		case ('p'):
+			return std::make_pair(Piece::Pawn, Color::Black);
+		default:
+			return std::make_pair(Piece::None, Color::None);
+		}
+	}
+
+	std::unordered_map<Square, char> Board::getBoardMap() const 
+	{
+		return this->board_map_;
 	}
 
 	int Board::indexOfPieceOccupyingSquare(const Square& sq) const

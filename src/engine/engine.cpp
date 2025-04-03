@@ -1,4 +1,5 @@
 #include "engine.h"
+#include <stdexcept>
 
 namespace Chess
 {
@@ -270,6 +271,83 @@ namespace Chess
 	BitBoard Engine::blackQueenValid(const Square& sq) const
 	{
 		return ((this->blackRookValid(sq)) | (this->blackQueenValid(sq)));
+	}
+
+	BitBoard Engine::legalMoves(const Piece& piece, const Color& color, const Square& sq) const
+	{
+		BitBoard legal_moves;
+		switch (piece)
+		{
+		case (Piece::King):
+			legal_moves = (Color::White == color) ? this->whiteKingValid(sq) : this->blackKingValid(sq);
+			break;
+		case (Piece::Queen):
+		    legal_moves = (Color::White == color) ? this->whiteQueenValid(sq) : this->blackQueenValid(sq);
+			break;
+		case (Piece::Rook):
+		    legal_moves = (Color::White == color) ? this->whiteRookValid(sq) : this->blackRookValid(sq);
+			break;
+		case (Piece::Knight):
+		    legal_moves = (Color::White == color) ? this->whiteKnightValid(sq) : this->blackKnightValid(sq);
+			break;
+		case (Piece::Bishop):
+		    legal_moves = (Color::White == color) ? this->whiteBishopValid(sq) : this->blackBishopValid(sq);
+			break;
+		case (Piece::Pawn):
+		    legal_moves = (Color::White == color) ? this->whitePawnValid(sq) : this->blackPawnValid(sq);
+			break;
+		default:
+			throw std::invalid_argument("Not a valid piece\n");
+		}
+		return legal_moves;
+	}
+
+	BitBoard Engine::allSquaresWhiteAttacks() const
+	{
+		BitBoard attack_bitboard = 0ULL;
+		std::unordered_map<Square, char> board_map = this->board_.getBoardMap();
+		for (int i = 0; i < 64; i++)
+		{
+			if (board_map[static_cast<Square>(i)] == 'K')
+				attack_bitboard |= this->whiteKingValid(static_cast<Square>(i));
+			else if (board_map[static_cast<Square>(i)] == 'Q')
+				attack_bitboard |= this->whiteQueenValid(static_cast<Square>(i));
+			else if (board_map[static_cast<Square>(i)] == 'R')
+				attack_bitboard |= this->whiteRookValid(static_cast<Square>(i));
+			else if (board_map[static_cast<Square>(i)] == 'B')
+				attack_bitboard |= this->whiteBishopValid(static_cast<Square>(i));
+			else if (board_map[static_cast<Square>(i)] == 'N')
+				attack_bitboard |= this->whiteKnightValid(static_cast<Square>(i));
+			else if (board_map[static_cast<Square>(i)] == 'P')
+				attack_bitboard |= this->whitePawnValid(static_cast<Square>(i));
+			else
+				continue;
+		}
+		return attack_bitboard;
+	}
+
+	BitBoard Engine::allSquaresBlackAttacks() const
+	{
+		BitBoard attack_bitboard = 0ULL;
+		std::unordered_map<Square, char> board_map = this->board_.getBoardMap();
+		for (int i = 0; i < 64; i++)
+		{
+			if (board_map[static_cast<Square>(i)] == 'k')
+				attack_bitboard |= this->blackKingValid(static_cast<Square>(i));
+			else if (board_map[static_cast<Square>(i)] == 'q')
+				attack_bitboard |= this->blackQueenValid(static_cast<Square>(i));
+			else if (board_map[static_cast<Square>(i)] == 'r')
+				attack_bitboard |= this->blackRookValid(static_cast<Square>(i));
+			else if (board_map[static_cast<Square>(i)] == 'b')
+				attack_bitboard |= this->blackBishopValid(static_cast<Square>(i));
+			else if (board_map[static_cast<Square>(i)] == 'n')
+				attack_bitboard |= this->blackKnightValid(static_cast<Square>(i));
+			else if (board_map[static_cast<Square>(i)] == 'p')
+				attack_bitboard |= this->blackPawnValid(static_cast<Square>(i));
+			else
+				continue;
+		}
+		return attack_bitboard;
 	}
 
 }

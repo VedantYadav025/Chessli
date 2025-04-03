@@ -9,6 +9,6 @@ int main()
 	Chess::Game chess_game(fen_string);
 	chess_game.printBoard();
 	std::cout << "*****************************\n\n";
-	Chess::printBitBoard(chess_game.getEngine().whiteBishopValid(Chess::Square::e2));
+	// Chess::printBitBoard(chess_game.getEngine().whiteBishopValid(Chess::Square::e2));
 	return 0;
 }
