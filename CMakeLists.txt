@@ -10,9 +10,13 @@ if (POLICY CMP0141)
 endif()
 
 project ("Chessli")
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+
+include_directories(include)
 
 # Add source to this project's executable.
-add_executable(Chessli )
+add_executable(Chessli "main.cpp" "src/board.cpp")
 
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)

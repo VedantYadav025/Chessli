@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/Chessli.dir/main.cpp.o CMakeFiles/Chessli.dir/src/board.cpp.o -o Chessli 
