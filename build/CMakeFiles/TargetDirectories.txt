@@ -1,3 +1,0 @@
-/home/oddity/Coding/Projects/Chess/backend/core/build/CMakeFiles/Chessli.dir
-/home/oddity/Coding/Projects/Chess/backend/core/build/CMakeFiles/edit_cache.dir
-/home/oddity/Coding/Projects/Chess/backend/core/build/CMakeFiles/rebuild_cache.dir
