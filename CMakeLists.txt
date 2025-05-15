@@ -16,7 +16,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 include_directories(include)
 
 # Add source to this project's executable.
-add_executable(Chessli "main.cpp" "src/board.cpp")
+add_executable(Chessli "main.cpp" "src/board.cpp" "src/utils.cpp" "src/validMoveGenerator.cpp")
 
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)

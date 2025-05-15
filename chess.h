@@ -1,2 +1,8 @@
 // Include all the header files in here
-#pragma once
+
+#ifndef _CHESS_H
+#define _CHESS_H
+
+#include "board/board.h"
+
+#endif

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "square.h"
+#include "../square/square.h"
 
 namespace Chess {
 	
