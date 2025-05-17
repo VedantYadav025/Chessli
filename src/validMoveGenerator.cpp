@@ -1,7 +1,9 @@
 #include "validMoveGenerator/validMoveGenerator.h"
 #include <iostream>
+#include <type_traits>
 #include "board/board.h"
 #include "pieces/pieces.h"
+#include "square/square.h"
 #include "utils/utils.h"
 
 namespace Chess {
@@ -27,8 +29,8 @@ BitBoard validMoveGenerator::bitboardOfValidMoves(const Square& square) const {
                         ~m_board.allBlackPiecesBitBoard());
     case (Piece_type::Pawn):
       return ((piece_at_square.m_color == Color_type::White)
-                  ? this->whitePawnValid(square) 
-                  : this->blackPawnValid(square));
+                  ? this->whitePawnValidBitBoard(square)
+                  : this->blackPawnValidBitBoard(square));
   }
 }
 
@@ -85,7 +87,8 @@ BitBoard validMoveGenerator::knightValidBitBoard(const Square& square) const {
   return spot_1 | spot_2 | spot_3 | spot_4 | spot_5 | spot_6 | spot_7 | spot_8;
 }
 
-BitBoard validMoveGenerator::whitePawnValid(const Square& square) const {
+BitBoard validMoveGenerator::whitePawnValidBitBoard(
+    const Square& square) const {
   BitBoard white_pawn_loc = 1ULL << static_cast<int>(square);
 
   /* check the single space infront of the white pawn */
@@ -97,7 +100,6 @@ BitBoard validMoveGenerator::whitePawnValid(const Square& square) const {
    *        one more */
   BitBoard white_pawn_two_steps = ((white_pawn_one_step & mask_rank[2]) << 8) &
                                   ~m_board.allPiecesBitBoard();
-
 
   /* the union of the movements dictate the possible moves forward
    *    available */
@@ -132,7 +134,8 @@ BitBoard validMoveGenerator::whitePawnValid(const Square& square) const {
   return WhitePawnValid;
 }
 
-BitBoard validMoveGenerator::blackPawnValid(const Square& square) const {
+BitBoard validMoveGenerator::blackPawnValidBitBoard(
+    const Square& square) const {
   BitBoard black_pawn_loc = 1ULL << static_cast<int>(square);
 
   /* check the single space infront of the black pawn */
@@ -171,6 +174,13 @@ BitBoard validMoveGenerator::blackPawnValid(const Square& square) const {
   BitBoard BlackPawnValid = black_pawn_valid_moves | black_pawn_valid_attacks;
 
   return BlackPawnValid;
+}
+
+BitBoard validMoveGenerator::rookValidBitBoard(const Square& square) const {
+  BitBoard occupancy = 1ULL << static_cast<int>(square);
+  occupancy &= rook_masks[square];
+  occupancy *= rook_magics[square];
+  occupancy >>= 64 - rook_rellevant_bits[square];
 }
 
 }  // namespace Chess

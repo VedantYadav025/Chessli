@@ -16,8 +16,8 @@ class validMoveGenerator {
 
 	// direction sensitive piece move functions
 	private:
-		BitBoard whitePawnValid(const Square& sq) const;
-		BitBoard blackPawnValid(const Square& sq) const;
+		BitBoard whitePawnValidBitBoard(const Square& sq) const;
+		BitBoard blackPawnValidBitBoard(const Square& sq) const;
 
 
 	// direction agnostic piece move funcitons
