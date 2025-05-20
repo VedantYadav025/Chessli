@@ -31,6 +31,8 @@ BitBoard validMoveGenerator::bitboardOfValidMoves(const Square& square) const {
       return ((piece_at_square.m_color == Color_type::White)
                   ? this->whitePawnValidBitBoard(square)
                   : this->blackPawnValidBitBoard(square));
+    case (Piece_type::Rook):
+      return ((piece_at_square.m_color == Color_type::White) ? this->rookValidBitBoard(square) & ~m_board.allWhitePiecesBitBoard() : this->rookValidBitBoard(square) & ~m_board.allBlackPiecesBitBoard());
   }
 }
 
@@ -178,10 +180,17 @@ BitBoard validMoveGenerator::blackPawnValidBitBoard(
 
 BitBoard validMoveGenerator::rookValidBitBoard(const Square& square) const {
   BitBoard occupancy = 1ULL << static_cast<int>(square);
-  occupancy &= rook_masks[square];
-  occupancy *= rook_magics[square];
-  occupancy >>= 64 - rook_rellevant_bits[square];
+  occupancy &= rook_masks[static_cast<int>(square)];
+  occupancy *= rook_magics[static_cast<int>(square)];
+  occupancy >>= 64 - rook_rellevant_bits[static_cast<int>(square)];
+
+  return rook_attacks[static_cast<int>(square)][occupancy];
 }
+
+
+  // occupancy &= rook_masks[square];
+  // occupancy *= rook_magics[square];
+  // occupancy >>= 64 - rook_rellevant_bits[square];
 
 }  // namespace Chess
 

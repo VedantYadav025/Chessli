@@ -10,9 +10,9 @@
 int main() {
   Chess::Board board;
   Chess::validMoveGenerator moveGen(board);
-  board.makeMove({Chess::Square::e2, Chess::Square::e4});
-  board.makeMove({Chess::Square::d7, Chess::Square::d5});
-  Chess::BitBoard valid_moves = moveGen.bitboardOfValidMoves(Chess::Square::d5);
-  Chess::printBitBoard(valid_moves);
+  board.makeMove({Chess::Square::a2, Chess::Square::a4});
+  board.printBoard();
+  Chess::BitBoard blah = moveGen.bitboardOfValidMoves(Chess::Square::a1);
+  Chess::printBitBoard(blah);
   return 0;
 }
