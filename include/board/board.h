@@ -6,7 +6,6 @@
 
 #include <array>
 #include <string_view>
-#include <vector>
 
 namespace Chess {
 
@@ -56,14 +55,14 @@ class Board {
   explicit Board(const std::string_view& fen_string);
   void makeMove(const Move& move);
   void printBoard() const;
-  BitBoard allWhitePiecesBitBoard() const;
-  BitBoard allBlackPiecesBitBoard() const;
-  BitBoard allPiecesBitBoard() const;
-  Piece getPieceAtSquare(const Square& square) const;
+  [[nodiscard]] BitBoard allWhitePiecesBitBoard() const;
+  [[nodiscard]] BitBoard allBlackPiecesBitBoard() const;
+  [[nodiscard]] BitBoard allPiecesBitBoard() const;
+  [[nodiscard]] Piece getPieceAtSquare(const Square& square) const;
 
  private:
-  std::array<BitBoard, 12> m_bitboards;
-  std::array<Piece, 64> m_piece_at_array;
+  std::array<BitBoard, 12> m_bitboards{};
+  std::array<Piece, 64> m_piece_at_array{};
 };
 
 }  // namespace Chess
