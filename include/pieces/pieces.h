@@ -6,7 +6,8 @@
 
 namespace Chess {
 
-enum class Piece_type {
+enum class Piece_type
+{
   Pawn,
   Knight,
   Bishop,
@@ -16,18 +17,22 @@ enum class Piece_type {
   None,
 };
 
-enum class Color_type {
+enum class Color_type
+{
   Black,
   White,
   None,
 };
 
-struct Piece {
+struct Piece
+{
   Piece_type m_piece;
   Color_type m_color;
 };
 
-constexpr char pieceToChar(const Piece& piece) {
+constexpr char
+pieceToChar(const Piece& piece)
+{
   switch (piece.m_piece) {
     case Piece_type::Pawn:
       return piece.m_color == Color_type::White ? 'P' : 'p';
@@ -47,5 +52,4 @@ constexpr char pieceToChar(const Piece& piece) {
   throw std::invalid_argument("Invalid piece type");
 }
 
-}  // namespace Chess
-
+} // namespace Chess

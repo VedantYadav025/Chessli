@@ -9,7 +9,8 @@
 
 namespace Chess {
 
-enum {
+enum
+{
   WHITE_PAWN_IDX,
   WHITE_KNIGHT_IDX,
   WHITE_BISHOP_IDX,
@@ -24,7 +25,9 @@ enum {
   BLACK_KING_IDX
 };
 
-constexpr BitBoard indexOfPiece(const Piece& piece) {
+constexpr BitBoard
+indexOfPiece(const Piece& piece)
+{
   switch (piece.m_piece) {
     case Piece_type::Pawn:
       return piece.m_color == Color_type::White ? WHITE_PAWN_IDX
@@ -49,8 +52,9 @@ constexpr BitBoard indexOfPiece(const Piece& piece) {
   }
 }
 
-class Board {
- public:
+class Board
+{
+public:
   explicit Board();
   explicit Board(const std::string_view& fen_string);
   void makeMove(const Move& move);
@@ -60,9 +64,9 @@ class Board {
   [[nodiscard]] BitBoard allPiecesBitBoard() const;
   [[nodiscard]] Piece getPieceAtSquare(const Square& square) const;
 
- private:
+private:
   std::array<BitBoard, 12> m_bitboards{};
   std::array<Piece, 64> m_piece_at_array{};
 };
 
-}  // namespace Chess
+} // namespace Chess
