@@ -2,6 +2,7 @@
 // This file is part of the Chess project.
 
 #pragma once
+#include <stdexcept>
 
 namespace Chess {
 
@@ -43,6 +44,7 @@ constexpr char pieceToChar(const Piece& piece) {
     case Piece_type::None:
       return '.';
   }
+  throw std::invalid_argument("Invalid piece type");
 }
 
 }  // namespace Chess

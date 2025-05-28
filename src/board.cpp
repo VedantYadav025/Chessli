@@ -83,7 +83,6 @@ void Board::printBoard() const {
   }
   std::cout << "\n   "
             << "a b c d e f g h\n";
-  return;
 }
 
 void Board::makeMove(const Move& move) {
@@ -114,10 +113,6 @@ void Board::makeMove(const Move& move) {
   m_piece_at_array[static_cast<int>(from)] = {Piece_type::None,
                                               Color_type::None};
   m_piece_at_array[static_cast<int>(to)] = piece_at_from;
-
-  printBitBoard(m_bitboards[BLACK_PAWN_IDX]);
-
-  return;
 }
 
 Piece Board::getPieceAtSquare(const Square& square) const {
@@ -137,7 +132,7 @@ BitBoard Board::allBlackPiecesBitBoard() const {
 }
 
 BitBoard Board::allPiecesBitBoard() const {
-  return this->allBlackPiecesBitBoard() & this->allWhitePiecesBitBoard();
+  return this->allBlackPiecesBitBoard() | this->allWhitePiecesBitBoard();
 }
 
 }  // namespace Chess

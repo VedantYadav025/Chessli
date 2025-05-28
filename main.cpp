@@ -1,18 +1,16 @@
 // Entry point for the application
 #include "board/board.h"
-#include "chess.h"
 #include "square/square.h"
 #include "utils/utils.h"
 #include "validMoveGenerator/validMoveGenerator.h"
 
-#include <iostream>
 
 int main() {
-  Chess::Board board;
-  Chess::validMoveGenerator moveGen(board);
-  board.makeMove({Chess::Square::a2, Chess::Square::a4});
-  board.printBoard();
-  Chess::BitBoard blah = moveGen.bitboardOfValidMoves(Chess::Square::a1);
-  Chess::printBitBoard(blah);
-  return 0;
+    Chess::Board board;
+    const Chess::validMoveGenerator moveGen(board);
+    board.makeMove({Chess::Square::b2, Chess::Square::b3});
+    board.printBoard();
+    const Chess::BitBoard bitboard = moveGen.bitboardOfValidMoves(Chess::Square::c1);
+    Chess::printBitBoard(bitboard);
+    return 0;
 }
