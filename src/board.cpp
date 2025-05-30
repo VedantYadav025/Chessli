@@ -1,4 +1,5 @@
 #include "board/board.h"
+#include "fen/fen.h"
 #include "pieces/pieces.h"
 #include "square/square.h"
 #include "utils/constants.h"
@@ -6,6 +7,7 @@
 
 #include <iostream>
 #include <stdexcept>
+#include <string_view>
 
 namespace Chess {
 
@@ -74,6 +76,17 @@ Board::Board()
   }
 }
 
+Board::Board(const std::string_view& fen_string)
+  : m_piece_at_array(parseFenString(fen_string))
+{
+  m_bitboards.fill(0ULL);
+  Piece piece;
+  for (int i = 0; i < 64; i++) {
+    piece = m_piece_at_array[i];
+    setBit(m_bitboards[pieceToIndex(piece)], i); 
+  }
+}
+
 void
 Board::printBoard() const
 {
@@ -134,7 +147,6 @@ Board::allWhitePiecesBitBoard() const
          m_bitboards[WHITE_BISHOP_IDX] | m_bitboards[WHITE_ROOK_IDX] |
          m_bitboards[WHITE_QUEEN_IDX] | m_bitboards[WHITE_KING_IDX];
 }
-
 
 BitBoard
 Board::allBlackPiecesBitBoard() const

@@ -1,4 +1,5 @@
 #pragma once
+
 #include "../board/board.h"
 #include "square/square.h"
 #include "utils/utils.h"
@@ -14,9 +15,9 @@ public:
 
 private:
   const Board& m_board;
-  // direction sensitive piece move functions
 
 private:
+  // direction sensitive piece move functions
   [[nodiscard]] BitBoard whitePawnValidBitBoard(const Square& sq) const;
   [[nodiscard]] BitBoard blackPawnValidBitBoard(const Square& sq) const;
 

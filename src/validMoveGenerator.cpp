@@ -157,7 +157,7 @@ validMoveGenerator::whitePawnValidBitBoard(const Square& sq) const
   const BitBoard white_pawn_valid_attacks =
     white_pawn_attacks & m_board.allBlackPiecesBitBoard();
 
-  printBitBoard(m_board.allBlackPiecesBitBoard());
+  // printBitBoard(m_board.allBlackPiecesBitBoard());
   // printBitBoard(white_pawn_valid_attacks);
 
   /* then we combine the two situations in which a white pawn can legally
@@ -237,7 +237,7 @@ validMoveGenerator::bishopValidBitBoard(const Square& square) const
   occupancy *= Magic::bishop_magics[static_cast<int>(square)];
   occupancy >>= 64 - Magic::bishop_relevant_bits[static_cast<int>(square)];
   // printBitBoard(Magic::rook_relevant_bits[static_cast<int>(square)]);
-  printBitBoard(Magic::bishop_attacks[static_cast<int>(square)][occupancy]);
+  // printBitBoard(Magic::bishop_attacks[static_cast<int>(square)][occupancy]);
 
   // printBitBoard(Magic::rook_relevant_bits[static_cast<int>(square)]);
   return Magic::bishop_attacks[static_cast<int>(square)][occupancy];

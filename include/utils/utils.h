@@ -6,6 +6,8 @@
 #include <cstdint>
 #include <unordered_map>
 
+
+
 namespace Chess {
 
 using BitBoard = std::uint64_t;
