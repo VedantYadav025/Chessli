@@ -4,6 +4,7 @@
 #include "square/square.h"
 #include "utils/constants.h"
 #include "utils/utils.h"
+#include "validMoveGenerator/validMoveGenerator.h"
 
 #include <iostream>
 #include <stdexcept>
@@ -157,9 +158,18 @@ Board::allBlackPiecesBitBoard() const
 }
 
 BitBoard
+Board::getBitBoard(const Piece& piece) const 
+{
+  return m_bitboards[indexOfPiece(piece)];
+}
+
+BitBoard
 Board::allPiecesBitBoard() const
 {
   return this->allBlackPiecesBitBoard() | this->allWhitePiecesBitBoard();
 }
+
+
+
 
 } // namespace Chess

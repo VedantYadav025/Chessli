@@ -12,6 +12,7 @@ public:
   explicit validMoveGenerator(const Board& board);
   [[nodiscard]] BitBoard bitboardOfValidMoves(const Square& square) const;
   void printBoard() const;
+  BitBoard getPawnAttacks(const Square& square) const;
 
 private:
   const Board& m_board;

@@ -65,6 +65,51 @@ validMoveGenerator::printBoard() const
   m_board.printBoard();
 }
 
+BitBoard
+validMoveGenerator::getPawnAttacks(const Square& square) const
+{
+  BitBoard white_pawn_loc = 1ULL << static_cast<int>(square);
+  if (m_board.getPieceAtSquare(square).m_color == Color_type::White) {
+    const BitBoard white_pawn_left_attack = (white_pawn_loc & clear_file[0])
+                                            << 7;
+    /* then check the right side of the pawn, minding the overflow File H */
+    const BitBoard white_pawn_right_attack = (white_pawn_loc & clear_file[7])
+                                             << 9;
+
+    /* the union of the left and right attacks together make up all the
+     *    possible attacks */
+    const BitBoard white_pawn_attacks =
+      white_pawn_left_attack | white_pawn_right_attack;
+
+    // printBitBoard(white_pawn_attacks);
+
+    /* Calculate where I can _actually_ attack something */
+    const BitBoard white_pawn_valid_attacks =
+      white_pawn_attacks & m_board.allBlackPiecesBitBoard();
+
+    return white_pawn_valid_attacks;
+  } else {
+    BitBoard black_pawn_loc = 1ULL << static_cast<int>(square);
+    /* check the left side of the pawn, minding the underflow File A */
+    const BitBoard black_pawn_left_attack =
+      (black_pawn_loc & clear_file[0]) >> 9;
+
+    /* then check the right side of the pawn, minding the overflow File H */
+    const BitBoard black_pawn_right_attack =
+      (black_pawn_loc & clear_file[7]) >> 7;
+
+    /* the union of the left and right attacks together make up all the
+     *    possible attacks */
+    const BitBoard black_pawn_attacks =
+      black_pawn_left_attack | black_pawn_right_attack;
+
+    /* Calculate where I can _actually_ attack something */
+    const BitBoard black_pawn_valid_attacks =
+      black_pawn_attacks & m_board.allWhitePiecesBitBoard();
+    return black_pawn_valid_attacks;
+  }
+}
+
 // private functions
 
 BitBoard

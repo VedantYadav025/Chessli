@@ -1,17 +1,33 @@
 // Entry point for the application
 #include "board/board.h"
+#include "engine/engine.h"
 #include "fen/fen.h"
+#include "move/move.h"
 #include "square/square.h"
 #include "utils/utils.h"
 #include "validMoveGenerator/validMoveGenerator.h"
 
+#include <iostream>
+#include <vector>
+
 int
 main()
 {
-  Chess::Board board("r1bk3r/p2pBpNp/n4n2/1p1NP2P/6P1/3P4/P1P1K3/q5b1 ");
-  Chess::validMoveGenerator engine(board);
+  Chess::Board board(
+    "rn2q3/pppp1ppp/1k6/2b5/3Q1P2/1B6/PPP2p1P/RN2K1NR w KQ - 0 1");
+  Chess::Engine engine(board);
+  Chess::validMoveGenerator move_gen(board);
+
+  Chess::printBitBoard(move_gen.bitboardOfValidMoves(Chess::Square::f2));
+
+  const std::vector<Chess::Move> legal_moves =
+    engine.getLegalMoves(Chess::Square::e1);
+
   board.printBoard();
-  Chess::BitBoard attack = engine.bitboardOfValidMoves(Chess::Square::a1);
-  Chess::printBitBoard(attack);
+  // std::cout << "Here\n";
+  for (const auto& move : legal_moves) {
+    Chess::printMove(move);
+  }
+
   return 0;
 }

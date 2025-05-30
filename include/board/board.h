@@ -82,8 +82,10 @@ public:
   void printBoard() const;
   [[nodiscard]] BitBoard allWhitePiecesBitBoard() const;
   [[nodiscard]] BitBoard allBlackPiecesBitBoard() const;
+  [[nodiscard]] BitBoard getBitBoard(const Piece& piece) const;
   [[nodiscard]] BitBoard allPiecesBitBoard() const;
   [[nodiscard]] Piece getPieceAtSquare(const Square& square) const;
+  [[nodiscard]] bool isKingInCheck(const Color_type& color) const;
 
 private:
   std::array<BitBoard, 12> m_bitboards{};
